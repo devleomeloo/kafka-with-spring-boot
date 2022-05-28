@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kafka.domain.LibraryEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.internals.RecordHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -20,7 +23,7 @@ import java.util.concurrent.TimeoutException;
 @Slf4j
 public class LibraryEventProducer {
 
-    // Classe responsavel por produzir a mensagem dentro do topico "library-events"
+    // Classe responsavel por produzir a mensagem dentro do topico "library-events" com 3 exemplos diferentes
 
     String topic = "library-events";
 
@@ -76,7 +79,11 @@ public class LibraryEventProducer {
 
     // metodo responsavel por criar um registro a ser enviado em um topico especifico
     private ProducerRecord<Integer, String> buildProducerRecord(Integer key, String value, String topic) {
-        return new ProducerRecord<>(topic, null, key, value, null);
+
+        // Adicionar alguns headers na criação da msg dentro do topico
+        List<Header> recordHeaders = List.of( new RecordHeader("event-source","scanner".getBytes()));
+
+        return new ProducerRecord<>(topic, null, key, value, recordHeaders);
     }
 
     //metodo responsavel por fazer uma chamada sincrona para gravar a msg no topico
