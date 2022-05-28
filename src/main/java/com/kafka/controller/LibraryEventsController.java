@@ -24,11 +24,14 @@ public class LibraryEventsController {
             @RequestBody LibraryEvent libraryEvent)
             throws JsonProcessingException, ExecutionException, InterruptedException, TimeoutException {
 
-/*      Chamada assíncrona para configurar o Kafka Template com mensagem de sucesso publica no topico
+        /* Chamada assíncrona para configurar o Kafka Template com mensagem de sucesso publica no topico
         libraryEventProducer.sendLibraryEvent(libraryEvent);*/
 
+        //Chamada assíncrona para configurar o Kafka Template com mensagem de sucesso publica no topico usando o ProducerRecord
+        libraryEventProducer.sendLibraryEvent_Approach2(libraryEvent);
+
         // Chamada síncrona para configurar o Kafka Template sem a necessidade de mensagem de validação
-        libraryEventProducer.sendLibraryEventSynchronous(libraryEvent);
+        //libraryEventProducer.sendLibraryEventSynchronous(libraryEvent);
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
     }
 }
