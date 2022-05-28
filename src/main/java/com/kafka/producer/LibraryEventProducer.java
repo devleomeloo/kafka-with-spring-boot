@@ -54,6 +54,7 @@ public class LibraryEventProducer {
         });
     }
 
+
     /* metodo responsavel por fazer uma chamada assincrona para gravar a msg no topico e validar se foi publicada.
         Usado um topico especifico através da classe ProducerRecord*/
     public void sendLibraryEvent_Approach2(LibraryEvent libraryEvent) throws JsonProcessingException {
@@ -77,14 +78,6 @@ public class LibraryEventProducer {
         });
     }
 
-    // metodo responsavel por criar um registro a ser enviado em um topico especifico
-    private ProducerRecord<Integer, String> buildProducerRecord(Integer key, String value, String topic) {
-
-        // Adicionar alguns headers na criação da msg dentro do topico
-        List<Header> recordHeaders = List.of( new RecordHeader("event-source","scanner".getBytes()));
-
-        return new ProducerRecord<>(topic, null, key, value, recordHeaders);
-    }
 
     //metodo responsavel por fazer uma chamada sincrona para gravar a msg no topico
     public SendResult<Integer, String> sendLibraryEventSynchronous(LibraryEvent libraryEvent)
@@ -106,6 +99,16 @@ public class LibraryEventProducer {
             throw ex;
         }
         return sendResult;
+    }
+
+
+    // metodo responsavel por criar um registro a ser enviado em um topico especifico
+    private ProducerRecord<Integer, String> buildProducerRecord(Integer key, String value, String topic) {
+
+        // Adicionar alguns headers na criação da msg dentro do topico
+        List<Header> recordHeaders = List.of( new RecordHeader("event-source","scanner".getBytes()));
+
+        return new ProducerRecord<>(topic, null, key, value, recordHeaders);
     }
 
     private void handleFailure(Integer key, String value, Throwable ex){
