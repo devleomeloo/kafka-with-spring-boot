@@ -1,0 +1,6 @@
+POST WITH-OUT STATUS
+---------------------
+curl -i \
+-d '{"libraryEventId":null,"book":{"bookId":1910,"bookName":"Kafka Producer Using Spring Boot","bookAuthor":"LeoMelo"}}' \
+-H "Content-Type: application/json" \
+-X POST http://localhost:8080/libraries/events/v1
