@@ -57,7 +57,7 @@ public class LibraryEventProducer {
 
     /* metodo responsavel por fazer uma chamada assincrona para gravar a msg no topico e validar se foi publicada.
         Usado um topico especifico através da classe ProducerRecord*/
-    public void sendLibraryEvent_Approach2(LibraryEvent libraryEvent) throws JsonProcessingException {
+    public ListenableFuture<SendResult<Integer, String>> sendLibraryEvent_Approach2(LibraryEvent libraryEvent) throws JsonProcessingException {
 
         Integer key = libraryEvent.getLibraryEventId();
         String value = objectMapper.writeValueAsString(libraryEvent);
@@ -76,6 +76,8 @@ public class LibraryEventProducer {
                 handleSuccess(key, value, result);
             }
         });
+
+        return listenableFuture;
     }
 
 
